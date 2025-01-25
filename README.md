@@ -41,18 +41,10 @@ stateDiagram-v2
 ```mermaid
 graph TD
     A[Cliente] -->|1. Solicitud Login| B[Cloudflare Worker]
-    B -->|2. Validación JWT| C[(PostgreSQL)]
-    C -->|3. Respuesta Válida/Inválida| B
-    B -->|4. Genera Nuevo Token| A
-    
-    style A fill:#90EE90,stroke:#006400
-    style B fill:#87CEEB,stroke:#000080
-    style C fill:#FFB6C1,stroke:#8B0000
-    linkStyle 0 stroke:#228B22,stroke-width:2px
-    linkStyle 1 stroke:#1E90FF,stroke-width:2px
-    linkStyle 2 stroke:#FF4500,stroke-width:2px
-    linkStyle 3 stroke:#9370DB,stroke-width:2px
-    
+    B -->|2.Validacion JWT| C[(PostgreSQL)]
+    C -->|3.Respuesta Valida/Invalida| B
+    B -->|4.Genera Nuevo Token| A
+
 ``` 
 </details>  
 ---
