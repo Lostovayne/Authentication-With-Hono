@@ -1,4 +1,3 @@
-
 # 🔐 API de Autenticación Moderna con Hono + Cloudflare Workers
 
 <div align="center">
@@ -9,6 +8,7 @@
 </div>
 
 ## 🎮 Demo Interactivo
+
 [![Lanzar Demo](https://img.shields.io/badge/Ver_Demo_Interactivo-Live-00cc88?style=flat-square&logo=azure-devops)](https://demo-auth-api.example.com)
 
 ```html
@@ -19,6 +19,7 @@
 ---
 
 ## 🔄 Flujo de Autenticación Interactivo
+
 ```mermaid
 %%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#ff6b6b'}}}%%
 stateDiagram-v2
@@ -40,28 +41,30 @@ stateDiagram-v2
 
 ```mermaid
 graph TD
-    A[Cliente] -->|1. Solicitud Login| B[Cloudflare Worker]
+    A[Cliente] -->|1.Solicitud Login| B[Cloudflare Worker]
     B -->|2.Validacion JWT| C[(PostgreSQL)]
     C -->|3.Respuesta Valida/Invalida| B
     B -->|4.Genera Nuevo Token| A
 
 ``` 
-</details>  
+
+</details>
 ---
 
 ## 📡 Playground de API
+
 ```javascript
 // Ejecuta directamente en el navegador (Ctrl+Enter)
 const testAuth = async () => {
-  const response = await fetch('https://api.example.com/auth/login', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      email: 'test@example.com',
-      password: 'SecurePass123!'
-    })
-  });
-  console.log(await response.json());
+    const response = await fetch('https://api.example.com/auth/login', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            email: 'test@example.com',
+            password: 'SecurePass123!'
+        })
+    });
+    console.log(await response.json());
 }
 testAuth();
 ```
@@ -69,25 +72,28 @@ testAuth();
 <details>
 <summary><strong>🔄 Probar Endpoints en Real Tiempo</strong></summary>
 
-| Endpoint | Acción | 
-|----------|--------|
+| Endpoint    | Acción                                                        | 
+|-------------|---------------------------------------------------------------|
 | `/register` | <button onclick="testEndpoint('/register')">Ejecutar</button> |
-| `/login` | <button onclick="testEndpoint('/login')">Ejecutar</button> |
-| `/reset` | <button onclick="testEndpoint('/reset')">Ejecutar</button> |
+| `/login`    | <button onclick="testEndpoint('/login')">Ejecutar</button>    |
+| `/reset`    | <button onclick="testEndpoint('/reset')">Ejecutar</button>    |
 
 ```html
+
 <script>
-function testEndpoint(endpoint) {
-  fetch(`https://api.example.com${endpoint}`, { method: 'POST' })
-    .then(response => alert(`Respuesta: ${response.status}`))
-}
+    function testEndpoint(endpoint) {
+        fetch(`https://api.example.com${endpoint}`, {method: 'POST'})
+                .then(response => alert(`Respuesta: ${response.status}`))
+    }
 </script>
 ```
+
 </details>
 
 ---
 
 ## 📊 Dashboard de Métricas en Tiempo Real
+
 ```vega-lite
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -104,18 +110,20 @@ function testEndpoint(endpoint) {
 ---
 
 ## 🛠 Configuración Dinámica
+
 <details>
 <summary><strong>🔧 Personalizar Variables de Entorno</strong></summary>
 
 ```javascript
 // Editar y copiar al .env
 const config = {
-  JWT_SECRET: "TuClaveSecreta", // 🛑 Cambiar este valor
-  DB_URL: "postgres://user:pass@neon.tech/db",
-  LOG_LEVEL: "debug" // 🔄 Niveles: debug, info, error
+    JWT_SECRET: "TuClaveSecreta", // 🛑 Cambiar este valor
+    DB_URL: "postgres://user:pass@neon.tech/db",
+    LOG_LEVEL: "debug" // 🔄 Niveles: debug, info, error
 };
 console.log('Configuración lista para usar!');
 ```
+
 </details>
 
 ---
