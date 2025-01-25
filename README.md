@@ -1,12 +1,8 @@
 
 # 🔐 API de Autenticación Moderna con Hono + Cloudflare Workers
 
-![Arquitectura Interactiva](https://via.placeholder.com/800x400.png?text=Haz+clic+para+explorar+el+diagrama+de+flujo)
-*Figura 1: Diagrama interactivo - [Explorar en Excalidraw](https://excalidraw.com/#json=xxxxxxxx)*
-
 <div align="center">
 
-[![Despliegue en Cloudflare](https://img.shields.io/badge/CF-Workers-deploy%20now-orange?logo=cloudflare&style=for-the-badge&logoColor=white)](https://dash.cloudflare.com)
 [![Probar en Postman](https://img.shields.io/badge/Test%20API-Postman-FF6C37?logo=postman&style=for-the-badge)](https://www.postman.com/)
 [![Abrir en GitPod](https://img.shields.io/badge/Dev%20Environment-Gitpod-1AA275?logo=gitpod&style=for-the-badge)](https://gitpod.io/#https://github.com/tu-repo)
 
