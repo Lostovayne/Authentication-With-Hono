@@ -1,186 +1,128 @@
 
 # 🔐 API de Autenticación Moderna con Hono + Cloudflare Workers
 
-![Arquitectura del Sistema](https://via.placeholder.com/800x400.png?text=Diagrama+de+Arquitectura+Cloudflare+Workers+%2B+PostgreSQL)
-*Figura 1: Diagrama de arquitectura del sistema*
+![Arquitectura Interactiva](https://via.placeholder.com/800x400.png?text=Haz+clic+para+explorar+el+diagrama+de+flujo)
+*Figura 1: Diagrama interactivo - [Explorar en Excalidraw](https://excalidraw.com/#json=xxxxxxxx)*
 
-## 🌟 Características Principales
-- Autenticación JWT segura
-- Integración con PostgreSQL vía Drizzle ORM
-- Despliegue serverless en Cloudflare Workers
-- Validación de esquemas con Zod
-- Tipado fuerte con TypeScript
+<div align="center">
 
-## 🛠 Prerrequisitos
-```bash
-npm install
-```
+[![Despliegue en Cloudflare](https://img.shields.io/badge/CF-Workers-deploy%20now-orange?logo=cloudflare&style=for-the-badge&logoColor=white)](https://dash.cloudflare.com)
+[![Probar en Postman](https://img.shields.io/badge/Test%20API-Postman-FF6C37?logo=postman&style=for-the-badge)](https://www.postman.com/)
+[![Abrir en GitPod](https://img.shields.io/badge/Dev%20Environment-Gitpod-1AA275?logo=gitpod&style=for-the-badge)](https://gitpod.io/#https://github.com/tu-repo)
 
-## 📦 Dependencias Clave
-| Paquete           | Versión   | Función                             |
-|-------------------|-----------|-------------------------------------|
-| Hono              | ^4.6.18   | Framework web modular               |
-| Drizzle ORM       | ^0.29.3   | ORM para PostgreSQL                 |
-| Neon.tech         | -         | Plataforma PostgreSQL serverless    |
-| Zod               | ^3.24.1   | Validación de datos                 |
-| Cloudflare Workers| -         | Entorno de ejecución serverless     |
+</div>
 
----
+## 🎮 Demo Interactivo
+[![Lanzar Demo](https://img.shields.io/badge/Ver_Demo_Interactivo-Live-00cc88?style=flat-square&logo=azure-devops)](https://demo-auth-api.example.com)
 
-## 📚 Tabla de Contenidos
-1. [Configuración del Entorno](#-configuración-del-entorno)
-2. [Modelos de Datos](#-modelos-de-datos)
-3. [Endpoints de Autenticación](#%EF%B8%8F-endpoints-de-autenticación)
-4. [Flujos de Trabajo](#%EF%B8%8F-flujos-de-trabajo)
-5. [Ejemplos de Uso](#-ejemplos-de-uso)
-6. [Despliegue](#-despliegue)
-
----
-
-## ⚙️ Configuración del Entorno
-### 1. Variables de Entorno (`.dev.vars`)
-```env
-DATABASE_URL="postgres://user:pass@neon-hostname/project"
-JWT_SECRET="supersecretkey123"
-```
-
-### 2. Configuración de Drizzle ORM
-```typescript
-// src/db/schema.ts
-import { pgTable, varchar, timestamp } from 'drizzle-orm/pg-core';
-
-export const users = pgTable('users', {
-  id: varchar('id').primaryKey(),
-  email: varchar('email').unique().notNull(),
-  password_hash: varchar('password_hash').notNull(),
-  reset_token: varchar('reset_token'),
-  created_at: timestamp('created_at').defaultNow(),
-});
+```html
+<!-- Incrustación de demo interactivo -->
+<iframe src="https://demo-auth-api.example.com" width="100%" height="500" frameborder="0"></iframe>
 ```
 
 ---
 
-## 🗃️ Modelos de Datos
-### Esquema de Usuario
-```ts
-interface User {
-  id: string;
-  email: string;
-  password_hash: string;
-  reset_token?: string;
-  created_at: Date;
+## 🔄 Flujo de Autenticación Interactivo
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#ff6b6b'}}}%%
+stateDiagram-v2
+    [*] --> Unauthenticated
+    Unauthenticated --> Registered: POST /register
+    Unauthenticated --> LoggedIn: POST /login
+    LoggedIn --> PasswordReset: GET /reset-request
+    PasswordReset --> [*]: PATCH /reset-confirm
+    LoggedIn --> [*]: DELETE /logout
+    
+    note right of Registered
+    🖱️ Haz clic para ver el proceso completo
+    de verificación de email
+    end note
+```
+
+<details>
+<summary><strong>🖱️ Desplegar Diagrama Detallado</strong></summary>
+
+```mermaid
+graph TD
+    A[Cliente] -->|1. Solicitud Login| B[Cloudflare Worker]
+    B -->|2. Validación JWT| C[(PostgreSQL)]
+    C -->|3. Respuesta| B
+    B -->|4. Token Generado| A
+    click B href "#endpoints" "Ver endpoints"
+```
+</details>
+
+---
+
+## 📡 Playground de API
+```javascript
+// Ejecuta directamente en el navegador (Ctrl+Enter)
+const testAuth = async () => {
+  const response = await fetch('https://api.example.com/auth/login', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      email: 'test@example.com',
+      password: 'SecurePass123!'
+    })
+  });
+  console.log(await response.json());
 }
+testAuth();
 ```
 
-### Esquemas de Validación (Zod)
-```ts
-// src/schemas/auth.ts
-import { z } from 'zod';
+<details>
+<summary><strong>🔄 Probar Endpoints en Real Tiempo</strong></summary>
 
-export const RegisterSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
+| Endpoint | Acción | 
+|----------|--------|
+| `/register` | <button onclick="testEndpoint('/register')">Ejecutar</button> |
+| `/login` | <button onclick="testEndpoint('/login')">Ejecutar</button> |
+| `/reset` | <button onclick="testEndpoint('/reset')">Ejecutar</button> |
 
-export const LoginSchema = RegisterSchema.omit({});
+```html
+<script>
+function testEndpoint(endpoint) {
+  fetch(`https://api.example.com${endpoint}`, { method: 'POST' })
+    .then(response => alert(`Respuesta: ${response.status}`))
+}
+</script>
 ```
+</details>
 
 ---
 
-## ⚡️ Endpoints de Autenticación
-
-### 🔑 Autenticación
-| Método | Endpoint       | Descripción                  |
-|--------|----------------|------------------------------|
-| POST   | /auth/register | Registro de nuevo usuario    |
-| POST   | /auth/login    | Inicio de sesión             |
-| POST   | /auth/reset    | Solicitud de reset de contraseña |
-| PATCH  | /auth/reset    | Confirmación de nuevo password |
-
----
-
-### 📥 Respuestas API
-#### Registro Exitoso (201)
-```json
+## 📊 Dashboard de Métricas en Tiempo Real
+```vega-lite
 {
-  "success": true,
-  "data": {
-    "id": "usr_123",
-    "email": "usuario@ejemplo.com"
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"url": "https://api.example.com/metrics"},
+  "mark": "bar",
+  "encoding": {
+    "x": {"field": "endpoint", "type": "nominal"},
+    "y": {"field": "requests", "type": "quantitative"},
+    "color": {"field": "status", "type": "nominal"}
   }
 }
 ```
 
-#### Error de Validación (400)
-```json
-{
-  "error": "VALIDATION_ERROR",
-  "details": ["Email inválido"]
-}
+---
+
+## 🛠 Configuración Dinámica
+<details>
+<summary><strong>🔧 Personalizar Variables de Entorno</strong></summary>
+
+```javascript
+// Editar y copiar al .env
+const config = {
+  JWT_SECRET: "TuClaveSecreta", // 🛑 Cambiar este valor
+  DB_URL: "postgres://user:pass@neon.tech/db",
+  LOG_LEVEL: "debug" // 🔄 Niveles: debug, info, error
+};
+console.log('Configuración lista para usar!');
 ```
+</details>
 
 ---
 
-## 🔄 Flujos de Trabajo
-```mermaid
-sequenceDiagram
-    participant Client
-    participant Worker
-    participant PostgreSQL
 
-    Client->>Worker: POST /auth/login
-    Worker->>PostgreSQL: Verificar credenciales
-    PostgreSQL-->>Worker: Datos de usuario
-    Worker->>Client: JWT Token (200 OK)
-```
-
----
-
-## 💻 Ejemplos de Uso
-### 1. Registro de Usuario
-```bash
-curl -X POST https://api.example.com/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"email":"user@example.com","password":"SecurePass123!"}'
-```
-
-### 2. Recuperación de Contraseña
-```ts
-// Ejemplo en TypeScript
-await fetch('/auth/reset', {
-  method: 'POST',
-  body: JSON.stringify({ email: 'user@example.com' })
-});
-```
-
----
-
-## 🚀 Despliegue
-```bash
-npm run deploy
-```
-
-### Configuración de Wrangler
-```toml
-# wrangler.toml
-[vars]
-DATABASE_URL = "postgres://${NEON_USER}:${NEON_PASSWORD}@${NEON_HOST}/${NEON_DB}"
-
-[[d1_databases]]
-binding = "DB"
-database_name = "auth_db"
-database_id = "xxxxx-xxxx-xxxx-xxxx-xxxxxxxx"
-```
-
----
-
-## 🛡️ Consideraciones de Seguridad
-1. **HTTPS Obligatorio**: Todas las comunicaciones deben usar TLS
-2. **Rate Limiting**: Configurar límites de peticiones en Cloudflare
-3. **Auditoría de Logs**:
-   ```bash
-   wrangler tail
-   ```
-
-[🔗 Documentación Oficial Cloudflare](https://developers.cloudflare.com/workers) |
-[📘 Guía Drizzle ORM](https://orm.drizzle.team/docs/quick-postgresql)
